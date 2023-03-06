@@ -1,11 +1,13 @@
 class MyStrings {
-  static const List<String> drawerStrings = [
-    'پروفایل کاربری',
-    'درباره تک‌بلاگ',
-    'اشتراک گذاری تک بلاگ',
-    'تک‌بلاگ در گیت هاب',
-  ];
-
+  static const String profile = 'پروفایل کاربری';
+  static const String shareText =
+      '''من از تک بلاگ استفاده میکنم ، خیلی باحاله ،تو هم داشته باش\n
+  www.sasansafari.com
+  ''';
+  static const String aboutTec = 'درباره تک‌بلاگ';
+  static const String tecGitHubUrl = 'https://github.com/sasansafari/techblog';
+  static const String sharingTec = 'اشتراک گذاری تک بلاگ';
+  static const String tecInGit = 'تک‌بلاگ در گیت هاب';
   static const String viewHotestBlog = 'مشاهده داغ ترین نوشته ها ';
   static const String viewHotestpodcasts = 'مشاهده داغ ترین پادکست ها ';
   static const String relatedArticle = 'نوشته های مرتبط';

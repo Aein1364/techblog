@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:travel_app2/component/myStrings.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Models/FakeData.dart';
 import '../gen/assets.gen.dart';
 import 'Colors.dart';
@@ -61,5 +65,14 @@ class MainTags extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+myLaunchUrl(String url) async {
+  var uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
+  } else {
+    return 'could not launch $url';
   }
 }
