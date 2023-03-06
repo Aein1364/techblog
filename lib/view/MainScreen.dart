@@ -1,24 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:travel_app2/view/RegisterIntro.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../component/Colors.dart';
 import '../component/myStrings.dart';
 import '../gen/assets.gen.dart';
 import 'HomeScreen.dart';
 import 'ProfileScreen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
 final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-class _MainScreenState extends State<MainScreen> {
-  int selectedPageIndex = 0;
+class MainScreen extends StatelessWidget {
+  RxInt selectedPageIndex = 0.obs;
+
+  MainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,37 +34,85 @@ class _MainScreenState extends State<MainScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 30, 0, 70),
                 child: Assets.img.logo.image(height: 90),
               ),
-              SizedBox(
-                height: size.height / 1.5,
-                child: ListView.builder(
-                    itemCount: MyStrings.drawerStrings.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Divider(
-                              thickness: .5,
-                              color: SolidColors.divider,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: InkWell(
-                                overlayColor: MaterialStateProperty.all(
-                                    SolidColors.primeryColor2),
-                                onTap: () {},
-                                child: Text(
-                                  MyStrings.drawerStrings[index],
-                                  style: textTheme.bodyLarge!.copyWith(
-                                      color: Colors.black, fontSize: 13),
-                                ),
-                              ),
-                            )
-                          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Divider(
+                      thickness: .5,
+                      color: SolidColors.divider,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: InkWell(
+                        overlayColor: MaterialStateProperty.all(
+                            SolidColors.primeryColor2),
+                        onTap: () {},
+                        child: Text(
+                          MyStrings.profile,
+                          style: textTheme.bodyLarge!
+                              .copyWith(color: Colors.black, fontSize: 13),
                         ),
-                      );
-                    }),
+                      ),
+                    ),
+                    const Divider(
+                      thickness: .5,
+                      color: SolidColors.divider,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: InkWell(
+                        overlayColor: MaterialStateProperty.all(
+                            SolidColors.primeryColor2),
+                        onTap: () {},
+                        child: Text(
+                          MyStrings.aboutTec,
+                          style: textTheme.bodyLarge!
+                              .copyWith(color: Colors.black, fontSize: 13),
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      thickness: .5,
+                      color: SolidColors.divider,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: InkWell(
+                        overlayColor: MaterialStateProperty.all(
+                            SolidColors.primeryColor2),
+                        onTap: () async {
+                          await Share.share(MyStrings.shareText);
+                        },
+                        child: Text(
+                          MyStrings.sharingTec,
+                          style: textTheme.bodyLarge!
+                              .copyWith(color: Colors.black, fontSize: 13),
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      thickness: .5,
+                      color: SolidColors.divider,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: InkWell(
+                        overlayColor: MaterialStateProperty.all(
+                            SolidColors.primeryColor2),
+                        onTap: () async {
+                          await launchUrl(Uri.parse(MyStrings.tecGitHubUrl));
+                        },
+                        child: Text(
+                          MyStrings.tecInGit,
+                          style: textTheme.bodyLarge!
+                              .copyWith(color: Colors.black, fontSize: 13),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -77,12 +122,12 @@ class _MainScreenState extends State<MainScreen> {
           elevation: 0,
           actions: [
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+              padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
               child: InkResponse(
                   onTap: () {
                     _key.currentState!.openDrawer();
                   },
-                  child: Icon(CupertinoIcons.line_horizontal_3)),
+                  child: const Icon(CupertinoIcons.line_horizontal_3)),
             ),
             Expanded(child: Assets.img.logo.image(height: 36)),
             const Padding(
@@ -94,17 +139,17 @@ class _MainScreenState extends State<MainScreen> {
         body: Stack(
           children: [
             Positioned.fill(
-
-                //appBar
-
-                child: IndexedStack(
-              index: selectedPageIndex,
-              children: [
-                HomeScreen(size: size, textTheme: textTheme),
-                RegisterIntro(),
-                ProfileScreen(size: size, textTheme: textTheme),
-              ],
-            )),
+                //selection of home screen
+                child: Obx(() {
+              return IndexedStack(
+                index: selectedPageIndex.value,
+                children: [
+                  HomeScreen(size: size, textTheme: textTheme),
+                  RegisterIntro(),
+                  ProfileScreen(size: size, textTheme: textTheme),
+                ],
+              );
+            })),
 
             //bottom gradient container
             Positioned(
@@ -112,7 +157,7 @@ class _MainScreenState extends State<MainScreen> {
               child: Container(
                 width: size.width,
                 height: size.height / 9,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         colors: GradientColors.downside,
                         begin: Alignment.bottomCenter,
@@ -123,9 +168,7 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavigationBar(
               size: size,
               onPressed: (int index) {
-                setState(() {
-                  selectedPageIndex = index;
-                });
+                selectedPageIndex.value = index;
               },
             )
           ],

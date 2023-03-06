@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 3)).then((value) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const MainScreen(),
+          builder: (context) => MainScreen(),
         ),
       );
     });
@@ -49,6 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
           const SizedBox(
             height: 32,
           ),
+          // ignore: prefer_const_constructors
           SpinKitFadingCube(
             color: SolidColors.primeryColor,
             size: 32,
